@@ -1,5 +1,4 @@
 // PlayerCard.tsx
-import React from "react";
 import { useOrderContext } from "../states/OrderContext";
 
 export type PlayerCardProps = {

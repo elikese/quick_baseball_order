@@ -14,9 +14,6 @@ export default function OrderFormPage() {
     const [pitcher, setPitcher] = useState<{ name: string; number: string } | null>(null);
     const [candidates, setCandidates] = useState<{ name: string; number: string }[]>([]);
 
-    const usedPositions = [...starters.map((p) => p.position).filter(Boolean), ...(pitcher ? ["1"] : [])];
-    const usedOrders = starters.map((p) => p.order).filter(Boolean);
-
     const handleChange = (index: number, field: string, value: string | number) => {
         const next = [...starters];
         (next[index] as any)[field] = value;
