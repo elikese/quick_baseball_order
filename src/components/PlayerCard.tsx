@@ -24,7 +24,7 @@ export default function PlayerCard({ order, position, name, number, onChange, on
     return (
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-4 space-y-2">
             <div className="flex justify-between items-center">
-                <span className="text-sm font-bold">타순 {order || "?"}번</span>
+                <span className="text-sm font-bold">타순 {order || ""}번</span>
                 <button onClick={onRemove} className="text-xs text-red-500">
                     삭제
                 </button>

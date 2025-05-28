@@ -1,5 +1,5 @@
-// OrderFormPage.tsx
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import PlayerCard from "../components/PlayerCard";
 import { useOrderContext } from "../states/OrderContext";
 
@@ -61,7 +61,7 @@ export default function OrderFormPage() {
         setSharedCandidates((prev) => [...prev, ...candidates]);
 
         if (pitcher) {
-            setSharedPitcher(pitcher); // 투수는 항상 하나니까 overwrite
+            setSharedPitcher(pitcher);
         }
 
         setStarters([]);
@@ -79,87 +79,114 @@ export default function OrderFormPage() {
             </div>
 
             <div className="space-y-3">
-                {pitcher && (
-                    <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-4 space-y-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-bold">투수</span>
-                            <button className="text-xs text-red-500" onClick={() => setPitcher(null)}>
-                                삭제
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div>
-                                <label className="block text-xs mb-0.5">성명</label>
-                                <input
-                                    type="text"
-                                    value={pitcher.name}
-                                    onChange={(e) =>
-                                        setPitcher((prev) => (prev ? { ...prev, name: e.target.value } : null))
-                                    }
-                                    className="w-full border border-gray-300 rounded px-1 py-0.5"
-                                    placeholder="이름"
-                                />
+                <AnimatePresence>
+                    {pitcher && (
+                        <motion.div
+                            key="pitcher"
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.25 }}
+                            className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-4 space-y-2"
+                        >
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-bold">투수</span>
+                                <button className="text-xs text-red-500" onClick={() => setPitcher(null)}>
+                                    삭제
+                                </button>
                             </div>
-                            <div>
-                                <label className="block text-xs mb-0.5">배번</label>
-                                <input
-                                    type="text"
-                                    value={pitcher.number}
-                                    onChange={(e) =>
-                                        setPitcher((prev) => (prev ? { ...prev, number: e.target.value } : null))
-                                    }
-                                    className="w-full border border-gray-300 rounded px-1 py-0.5"
-                                    placeholder="번호"
-                                />
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <label className="block text-xs mb-0.5">성명</label>
+                                    <input
+                                        type="text"
+                                        value={pitcher.name}
+                                        onChange={(e) =>
+                                            setPitcher((prev) => (prev ? { ...prev, name: e.target.value } : null))
+                                        }
+                                        className="w-full border border-gray-300 rounded px-1 py-0.5"
+                                        placeholder="이름"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs mb-0.5">배번</label>
+                                    <input
+                                        type="text"
+                                        value={pitcher.number}
+                                        onChange={(e) =>
+                                            setPitcher((prev) => (prev ? { ...prev, number: e.target.value } : null))
+                                        }
+                                        className="w-full border border-gray-300 rounded px-1 py-0.5"
+                                        placeholder="번호"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
-                {starters.map((player, idx) => (
-                    <PlayerCard
-                        key={idx}
-                        order={player.order}
-                        position={player.position}
-                        name={player.name}
-                        number={player.number}
-                        onChange={(field, value) => handleChange(idx, field, value)}
-                        onRemove={() => removeStarter(idx)}
-                    />
-                ))}
+                <AnimatePresence>
+                    {starters.map((player, idx) => (
+                        <motion.div
+                            key={`starter-${idx}`}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <PlayerCard
+                                order={player.order}
+                                position={player.position}
+                                name={player.name}
+                                number={player.number}
+                                onChange={(field, value) => handleChange(idx, field, value)}
+                                onRemove={() => removeStarter(idx)}
+                            />
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
 
-                {candidates.map((candidate, idx) => (
-                    <div key={idx} className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-4 space-y-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-bold">후보 {idx + 1}</span>
-                            <button onClick={() => removeCandidate(idx)} className="text-xs text-red-500">
-                                삭제
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div>
-                                <label className="block text-xs mb-0.5">성명</label>
-                                <input
-                                    type="text"
-                                    value={candidate.name}
-                                    onChange={(e) => handleCandidateChange(idx, "name", e.target.value)}
-                                    className="w-full border border-gray-300 rounded px-1 py-0.5"
-                                    placeholder="이름"
-                                />
+                <AnimatePresence>
+                    {candidates.map((candidate, idx) => (
+                        <motion.div
+                            key={`candidate-${idx}`}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-4 space-y-2"
+                        >
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-bold">후보 {idx + 1}</span>
+                                <button onClick={() => removeCandidate(idx)} className="text-xs text-red-500">
+                                    삭제
+                                </button>
                             </div>
-                            <div>
-                                <label className="block text-xs mb-0.5">배번</label>
-                                <input
-                                    type="text"
-                                    value={candidate.number}
-                                    onChange={(e) => handleCandidateChange(idx, "number", e.target.value)}
-                                    className="w-full border border-gray-300 rounded px-1 py-0.5"
-                                    placeholder="번호"
-                                />
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                                <div>
+                                    <label className="block text-xs mb-0.5">성명</label>
+                                    <input
+                                        type="text"
+                                        value={candidate.name}
+                                        onChange={(e) => handleCandidateChange(idx, "name", e.target.value)}
+                                        className="w-full border border-gray-300 rounded px-1 py-0.5"
+                                        placeholder="이름"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs mb-0.5">배번</label>
+                                    <input
+                                        type="text"
+                                        value={candidate.number}
+                                        onChange={(e) => handleCandidateChange(idx, "number", e.target.value)}
+                                        className="w-full border border-gray-300 rounded px-1 py-0.5"
+                                        placeholder="번호"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                ))}
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
             </div>
 
             <div className="flex justify-center gap-2 pt-2">
