@@ -2,7 +2,7 @@
 import { createContext, useContext, useState } from "react";
 
 type Player = { order: number; position: string; name: string; number: string };
-type Pitcher = { name: string; number: string };
+type Pitcher = { name: string; number: string; position: string };
 type Candidate = { name: string; number: string };
 
 type OrderContextType = {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PlayerCard from "../components/PlayerCard";
 import { useOrderContext } from "../states/OrderContext";
+import PitcherCard from "../components/PitcherCard";
 
 export default function OrderFormPage() {
     const {
@@ -11,7 +12,7 @@ export default function OrderFormPage() {
     } = useOrderContext();
 
     const [starters, setStarters] = useState<{ order: number; position: string; name: string; number: string }[]>([]);
-    const [pitcher, setPitcher] = useState<{ name: string; number: string } | null>(null);
+    const [pitcher, setPitcher] = useState<{ name: string; number: string; position: string } | null>(null);
     const [candidates, setCandidates] = useState<{ name: string; number: string }[]>([]);
 
     const handleChange = (index: number, field: string, value: string | number) => {
@@ -33,7 +34,7 @@ export default function OrderFormPage() {
 
     const addPitcher = () => {
         if (pitcher) return;
-        setPitcher({ name: "", number: "" });
+        setPitcher({ name: "", number: "", position: "" });
     };
 
     const addCandidate = () => {
@@ -87,40 +88,16 @@ export default function OrderFormPage() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.25 }}
-                            className="bg-white/80 backdrop-blur-sm rounded-lg shadow p-4 space-y-2"
                         >
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm font-bold">투수</span>
-                                <button className="text-xs text-red-500" onClick={() => setPitcher(null)}>
-                                    삭제
-                                </button>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 text-sm">
-                                <div>
-                                    <label className="block text-xs mb-0.5">성명</label>
-                                    <input
-                                        type="text"
-                                        value={pitcher.name}
-                                        onChange={(e) =>
-                                            setPitcher((prev) => (prev ? { ...prev, name: e.target.value } : null))
-                                        }
-                                        className="w-full border border-gray-300 rounded px-1 py-0.5"
-                                        placeholder="이름"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs mb-0.5">배번</label>
-                                    <input
-                                        type="text"
-                                        value={pitcher.number}
-                                        onChange={(e) =>
-                                            setPitcher((prev) => (prev ? { ...prev, number: e.target.value } : null))
-                                        }
-                                        className="w-full border border-gray-300 rounded px-1 py-0.5"
-                                        placeholder="번호"
-                                    />
-                                </div>
-                            </div>
+                            <PitcherCard
+                                position={pitcher.position}
+                                name={pitcher.name}
+                                number={pitcher.number}
+                                onChange={(field, value) =>
+                                    setPitcher((prev) => (prev ? { ...prev, [field]: value } : null))
+                                }
+                                onRemove={() => setPitcher(null)}
+                            />
                         </motion.div>
                     )}
                 </AnimatePresence>
